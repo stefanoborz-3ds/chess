@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ScacchiHub - Gioca a scacchi online</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- LOGIN / REGISTRAZIONE -->
+<main id="auth" class="auth">
+  <div class="auth-box">
+    <div class="logo big">♞ ScacchiHub</div>
+    <p class="sub">Gioca a scacchi, impara e sfida i tuoi amici.</p>
+    <div class="tabs">
+      <button id="tab-login" class="active">Accedi</button>
+      <button id="tab-reg">Registrati</button>
+    </div>
+    <form id="form">
+      <input id="user" placeholder="Nome utente" autocomplete="username" required minlength="3">
+      <input id="pass" type="password" placeholder="Password" autocomplete="current-password" required minlength="4">
+      <input id="pass2" type="password" placeholder="Ripeti password" class="hidden">
+      <p id="msg" class="msg"></p>
+      <button class="btn" id="submit">Accedi</button>
+    </form>
+  </div>
+</main>
 
+<!-- APP -->
+<div id="app" class="app hidden">
+  <aside class="side">
+    <div class="logo">♞ ScacchiHub</div>
+    <nav>
+      <a class="on">♟ Gioca</a><a>🧩 Problemi</a><a>🎓 Impara</a><a>👁 Guarda</a><a>👥 Social</a><a>⋯ Altro</a>
+    </nav>
+    <div class="side-bottom">
+      <button class="btn ghost" id="logout">Esci</button>
+    </div>
+  </aside>
+  <section class="main">
+    <div class="board-col">
+      <div class="player"><span class="avatar">🤖</span><b>Computer</b> <small>(1200)</small></div>
+      <div id="board" class="board"></div>
+      <div class="player"><span class="avatar">🙂</span><b id="me">Tu</b> <small>(800)</small></div>
+    </div>
+    <div class="panel">
+      <h2>Gioca a scacchi</h2>
+      <p>Benvenuto, <b id="welcome"></b>! Clicca un pezzo e poi la casella di arrivo.</p>
+      <div class="turn" id="turn">Tocca al Bianco</div>
+      <div class="times">
+        <button class="btn">⚡ 3 min</button><button class="btn">🚀 10 min</button><button class="btn">♟ 30 min</button>
+      </div>
+      <button class="btn big-btn" id="reset">Nuova partita</button>
+      <div class="stats"><div><b id="games">0</b><span>Partite</span></div><div><b>800</b><span>Rating</span></div></div>
+    </div>
+  </section>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
