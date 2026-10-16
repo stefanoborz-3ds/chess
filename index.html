@@ -7,17 +7,13 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- LOGIN / REGISTRAZIONE -->
 <main id="auth" class="auth">
   <div class="auth-box">
     <div class="logo big">♞ ScacchiHub</div>
-    <p class="sub">Gioca a scacchi, impara e sfida i tuoi amici.</p>
-    <div class="tabs">
-      <button id="tab-login" class="active">Accedi</button>
-      <button id="tab-reg">Registrati</button>
-    </div>
+    <p class="sub">Gioca a scacchi online con i tuoi amici.</p>
+    <div class="tabs"><button id="tab-login" class="active">Accedi</button><button id="tab-reg">Registrati</button></div>
     <form id="form">
-      <input id="user" placeholder="Nome utente" autocomplete="username" required minlength="3">
+      <input id="user" placeholder="Nome utente" autocomplete="username" required minlength="3" maxlength="16">
       <input id="pass" type="password" placeholder="Password" autocomplete="current-password" required minlength="4">
       <input id="pass2" type="password" placeholder="Ripeti password" class="hidden">
       <p id="msg" class="msg"></p>
@@ -26,35 +22,63 @@
   </div>
 </main>
 
-<!-- APP -->
 <div id="app" class="app hidden">
   <aside class="side">
     <div class="logo">♞ ScacchiHub</div>
     <nav>
-      <a class="on">♟ Gioca</a><a>🧩 Problemi</a><a>🎓 Impara</a><a>👁 Guarda</a><a>👥 Social</a><a>⋯ Altro</a>
+      <a class="on" id="nav-play">♟ Gioca</a><a>🧩 Problemi</a><a>🎓 Impara</a><a>👁 Guarda</a><a>👥 Amici</a>
     </nav>
-    <div class="side-bottom">
-      <button class="btn ghost" id="logout">Esci</button>
-    </div>
+    <div class="side-bottom"><div class="me-chip"><span class="avatar">🙂</span><div><b id="me-name"></b><small id="me-elo"></small></div></div>
+      <button class="btn ghost" id="logout">Esci</button></div>
   </aside>
-  <section class="main">
+
+  <section id="lobby" class="lobby">
+    <div class="card">
+      <h2>Gioca con un amico</h2>
+      <p>Scegli il tempo, crea la partita e manda il link al tuo amico.</p>
+      <select id="tc">
+        <option value="1+0">⚡ 1 min</option><option value="3+0">⚡ 3 min</option><option value="3+2">⚡ 3 | 2</option>
+        <option value="5+0">⚡ 5 min</option><option value="10+0" selected>⏱ 10 min</option><option value="15+10">⏱ 15 | 10</option><option value="30+0">♟ 30 min</option>
+      </select>
+      <button class="btn big-btn" id="create">Crea partita</button>
+      <div class="join"><input id="code" placeholder="Codice o link della partita"><button class="btn gray" id="join">Unisciti</button></div>
+      <button class="btn gray big-btn small" id="local">Gioca in locale (stesso schermo)</button>
+    </div>
+    <div class="card stats">
+      <h2>Le tue statistiche</h2>
+      <div class="row"><div><b id="s-elo">800</b><span>Rating</span></div><div><b id="s-w">0</b><span>Vittorie</span></div><div><b id="s-d">0</b><span>Patte</span></div><div><b id="s-l">0</b><span>Sconfitte</span></div></div>
+    </div>
+  </section>
+
+  <section id="game" class="game hidden">
     <div class="board-col">
-      <div class="player"><span class="avatar">🤖</span><b>Computer</b> <small>(1200)</small></div>
-      <div id="board" class="board"></div>
-      <div class="player"><span class="avatar">🙂</span><b id="me">Tu</b> <small>(800)</small></div>
+      <div class="player" id="bar-top"><span class="avatar">👤</span><b id="n-top"></b><span class="clock" id="clk-top">10:00</span></div>
+      <div class="board-wrap"><div id="board" class="board"></div></div>
+      <div class="player" id="bar-bot"><span class="avatar">🙂</span><b id="n-bot"></b><span class="clock" id="clk-bot">10:00</span></div>
     </div>
     <div class="panel">
-      <h2>Gioca a scacchi</h2>
-      <p>Benvenuto, <b id="welcome"></b>! Clicca un pezzo e poi la casella di arrivo.</p>
-      <div class="turn" id="turn">Tocca al Bianco</div>
-      <div class="times">
-        <button class="btn">⚡ 3 min</button><button class="btn">🚀 10 min</button><button class="btn">♟ 30 min</button>
+      <div id="status" class="status">Partita</div>
+      <div id="wait" class="wait hidden"><p>Manda questo link al tuo amico:</p><input id="link" readonly><button class="btn" id="copy">Copia link</button><p class="small">Codice: <b id="gcode"></b></p></div>
+      <div id="moves" class="moves"></div>
+      <div class="actions">
+        <button class="btn gray" id="flip" title="Gira scacchiera">⟳</button>
+        <button class="btn gray" id="draw">½ Patta</button>
+        <button class="btn gray" id="resign">⚑ Abbandona</button>
+        <button class="btn gray" id="leave">Esci</button>
       </div>
-      <button class="btn big-btn" id="reset">Nuova partita</button>
-      <div class="stats"><div><b id="games">0</b><span>Partite</span></div><div><b>800</b><span>Rating</span></div></div>
     </div>
   </section>
 </div>
+
+<div id="modal" class="modal hidden"><div class="modal-box">
+  <h2 id="m-title"></h2><p id="m-why"></p>
+  <button class="btn big-btn" id="m-rematch">Rivincita</button>
+  <button class="btn gray big-btn" id="m-close">Torna alla lobby</button>
+</div></div>
+<div id="toast" class="toast hidden"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chess.js@0.10.3/chess.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
